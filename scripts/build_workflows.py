@@ -38,7 +38,7 @@ class Graph:
 
 def head(g, max_side=1280, duration=8.0):
     """Load a clip, trim it, split it into frames and cap the resolution."""
-    load = g.add("LoadVideo", "Input clip", file="example.mp4")
+    load = g.add("LoadVideo", "Input clip", file="lidarlab_sample.mp4")
     trim = g.add("Video Slice", "Trim", video=[load, 0], start_time=0.0, duration=duration, strict_duration=False)
     comp = g.add("GetVideoComponents", "Frames + audio + fps", video=[trim, 0])
     scale = g.add("ImageScaleToMaxDimension", "Working resolution", image=[comp, 0], upscale_method="area",

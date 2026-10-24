@@ -1,0 +1,1089 @@
+{
+ "id": "0a804c5f-47d0-471c-9a57-4da733240cad",
+ "revision": 0,
+ "last_node_id": 12,
+ "last_link_id": 15,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "LoadVideo",
+   "pos": [
+    60,
+    90
+   ],
+   "size": [
+    282.798828125,
+    233.0743408203125
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "file",
+     "name": "file",
+     "type": "COMBO",
+     "widget": {
+      "name": "file"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "choose file to upload",
+     "name": "upload",
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "VIDEO",
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      1
+     ]
+    }
+   ],
+   "title": "Input clip",
+   "properties": {
+    "Node name for S&R": "LoadVideo"
+   },
+   "widgets_values": [
+    "lidarlab_sample.mp4",
+    "image"
+   ],
+   "widgets_values_named": {
+    "file": "lidarlab_sample.mp4",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 2,
+   "type": "Video Slice",
+   "pos": [
+    441.6919921875,
+    90
+   ],
+   "size": [
+    270,
+    106
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1
+    },
+    {
+     "localized_name": "start_time",
+     "name": "start_time",
+     "type": "FLOAT",
+     "widget": {
+      "name": "start_time"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "duration",
+     "name": "duration",
+     "type": "FLOAT",
+     "widget": {
+      "name": "duration"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "strict_duration",
+     "name": "strict_duration",
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "strict_duration"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "VIDEO",
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      2
+     ]
+    }
+   ],
+   "title": "Trim",
+   "properties": {
+    "Node name for S&R": "Video Slice"
+   },
+   "widgets_values": [
+    0,
+    8,
+    false
+   ],
+   "widgets_values_named": {
+    "start_time": 0,
+    "duration": 8,
+    "strict_duration": false
+   }
+  },
+  {
+   "id": 3,
+   "type": "GetVideoComponents",
+   "pos": [
+    771.6919921875,
+    90
+   ],
+   "size": [
+    193.530859375,
+    106
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "link": 2
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "links": [
+      3
+     ]
+    },
+    {
+     "localized_name": "audio",
+     "name": "audio",
+     "type": "AUDIO",
+     "links": null
+    },
+    {
+     "localized_name": "fps",
+     "name": "fps",
+     "type": "FLOAT",
+     "links": [
+      12,
+      14
+     ]
+    },
+    {
+     "localized_name": "bit_depth",
+     "name": "bit_depth",
+     "type": "COMBO",
+     "links": null
+    },
+    {
+     "localized_name": "color_space",
+     "name": "color_space",
+     "type": "COMBO",
+     "links": null
+    }
+   ],
+   "title": "Frames + audio + fps",
+   "properties": {
+    "Node name for S&R": "GetVideoComponents"
+   }
+  },
+  {
+   "id": 4,
+   "type": "ImageScaleToMaxDimension",
+   "pos": [
+    1025.2228515625,
+    90
+   ],
+   "size": [
+    303.4400390625,
+    82
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 3
+    },
+    {
+     "localized_name": "upscale_method",
+     "name": "upscale_method",
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "largest_size",
+     "name": "largest_size",
+     "type": "INT",
+     "widget": {
+      "name": "largest_size"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      5,
+      7,
+      9
+     ]
+    }
+   ],
+   "title": "Working resolution",
+   "properties": {
+    "Node name for S&R": "ImageScaleToMaxDimension"
+   },
+   "widgets_values": [
+    "area",
+    1280
+   ],
+   "widgets_values_named": {
+    "upscale_method": "area",
+    "largest_size": 1280
+   }
+  },
+  {
+   "id": 5,
+   "type": "LoadBackgroundRemovalModel",
+   "pos": [
+    60,
+    413.0743408203125
+   ],
+   "size": [
+    321.6919921875,
+    58
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "bg_removal_name",
+     "name": "bg_removal_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "bg_removal_name"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "bg_model",
+     "name": "bg_model",
+     "type": "BACKGROUND_REMOVAL",
+     "links": [
+      4
+     ]
+    }
+   ],
+   "title": "BiRefNet",
+   "properties": {
+    "Node name for S&R": "LoadBackgroundRemovalModel"
+   },
+   "widgets_values": [
+    "birefnet.safetensors"
+   ],
+   "widgets_values_named": {
+    "bg_removal_name": "birefnet.safetensors"
+   }
+  },
+  {
+   "id": 6,
+   "type": "LidarLabBiRefNetMatte",
+   "pos": [
+    1388.6628906249998,
+    90
+   ],
+   "size": [
+    303.80234375,
+    102
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "bg_removal_model",
+     "name": "bg_removal_model",
+     "type": "BACKGROUND_REMOVAL",
+     "link": 4
+    },
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 5
+    },
+    {
+     "localized_name": "resolution",
+     "name": "resolution",
+     "type": "INT",
+     "widget": {
+      "name": "resolution"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "stride",
+     "name": "stride",
+     "type": "INT",
+     "widget": {
+      "name": "stride"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "masks",
+     "name": "masks",
+     "type": "MASK",
+     "links": [
+      10
+     ]
+    }
+   ],
+   "title": "Subject matte (any camera)",
+   "properties": {
+    "Node name for S&R": "LidarLabBiRefNetMatte"
+   },
+   "widgets_values": [
+    768,
+    2
+   ],
+   "widgets_values_named": {
+    "resolution": 768,
+    "stride": 2
+   }
+  },
+  {
+   "id": 7,
+   "type": "LoadDA3Model",
+   "pos": [
+    60,
+    561.0743408203125
+   ],
+   "size": [
+    270,
+    82
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model_name",
+     "name": "model_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "model_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "weight_dtype",
+     "name": "weight_dtype",
+     "type": "COMBO",
+     "widget": {
+      "name": "weight_dtype"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "DA3_MODEL",
+     "name": "DA3_MODEL",
+     "type": "DA3_MODEL",
+     "links": [
+      6
+     ]
+    }
+   ],
+   "title": "Depth Anything 3",
+   "properties": {
+    "Node name for S&R": "LoadDA3Model"
+   },
+   "widgets_values": [
+    "depth_anything_3_mono_large.safetensors",
+    "bf16"
+   ],
+   "widgets_values_named": {
+    "model_name": "depth_anything_3_mono_large.safetensors",
+    "weight_dtype": "bf16"
+   }
+  },
+  {
+   "id": 8,
+   "type": "DA3Inference",
+   "pos": [
+    1388.6628906249998,
+    282
+   ],
+   "size": [
+    270,
+    126
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "da3_model",
+     "name": "da3_model",
+     "type": "DA3_MODEL",
+     "link": 6
+    },
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 7
+    },
+    {
+     "localized_name": "resolution",
+     "name": "resolution",
+     "type": "INT",
+     "widget": {
+      "name": "resolution"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "resize_method",
+     "name": "resize_method",
+     "type": "COMBO",
+     "widget": {
+      "name": "resize_method"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "mode",
+     "name": "mode",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "mode"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "da3_geometry",
+     "name": "da3_geometry",
+     "type": "DA3_GEOMETRY",
+     "links": [
+      8
+     ]
+    }
+   ],
+   "title": "Video depth",
+   "properties": {
+    "Node name for S&R": "DA3Inference"
+   },
+   "widgets_values": [
+    504,
+    "upper_bound_resize",
+    "mono"
+   ],
+   "widgets_values_named": {
+    "resolution": 504,
+    "resize_method": "upper_bound_resize",
+    "mode": "mono"
+   }
+  },
+  {
+   "id": 9,
+   "type": "LidarLabStabilizeDepth",
+   "pos": [
+    1752.465234375,
+    90
+   ],
+   "size": [
+    279.107421875,
+    58
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "da3_geometry",
+     "name": "da3_geometry",
+     "type": "DA3_GEOMETRY",
+     "link": 8
+    },
+    {
+     "localized_name": "temporal_smoothing",
+     "name": "temporal_smoothing",
+     "type": "FLOAT",
+     "widget": {
+      "name": "temporal_smoothing"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "da3_geometry",
+     "name": "da3_geometry",
+     "type": "DA3_GEOMETRY",
+     "links": [
+      11
+     ]
+    }
+   ],
+   "title": "Stabilize depth",
+   "properties": {
+    "Node name for S&R": "LidarLabStabilizeDepth"
+   },
+   "widgets_values": [
+    0.6
+   ],
+   "widgets_values_named": {
+    "temporal_smoothing": 0.6
+   }
+  },
+  {
+   "id": 10,
+   "type": "LidarLabBulletTime",
+   "pos": [
+    2091.57265625,
+    90
+   ],
+   "size": [
+    270,
+    334
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 9
+    },
+    {
+     "localized_name": "masks",
+     "name": "masks",
+     "type": "MASK",
+     "link": 10
+    },
+    {
+     "localized_name": "da3_geometry",
+     "name": "da3_geometry",
+     "type": "DA3_GEOMETRY",
+     "link": 11
+    },
+    {
+     "localized_name": "plate",
+     "name": "plate",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "localized_name": "fps",
+     "name": "fps",
+     "type": "FLOAT",
+     "widget": {
+      "name": "fps"
+     },
+     "link": 12
+    },
+    {
+     "localized_name": "freeze_at",
+     "name": "freeze_at",
+     "type": "FLOAT",
+     "widget": {
+      "name": "freeze_at"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "duration",
+     "name": "duration",
+     "type": "FLOAT",
+     "widget": {
+      "name": "duration"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "angle",
+     "name": "angle",
+     "type": "FLOAT",
+     "widget": {
+      "name": "angle"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "zoom",
+     "name": "zoom",
+     "type": "FLOAT",
+     "widget": {
+      "name": "zoom"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "ramp",
+     "name": "ramp",
+     "type": "FLOAT",
+     "widget": {
+      "name": "ramp"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "flash",
+     "name": "flash",
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "flash"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "motion_blur",
+     "name": "motion_blur",
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "motion_blur"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "relief",
+     "name": "relief",
+     "type": "FLOAT",
+     "widget": {
+      "name": "relief"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "fov",
+     "name": "fov",
+     "type": "FLOAT",
+     "widget": {
+      "name": "fov"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "links": [
+      13
+     ]
+    }
+   ],
+   "title": "Bullet Time",
+   "properties": {
+    "Node name for S&R": "LidarLabBulletTime"
+   },
+   "widgets_values": [
+    24,
+    -1,
+    2.2,
+    14,
+    0.35,
+    0.5,
+    true,
+    true,
+    0.25,
+    60
+   ],
+   "widgets_values_named": {
+    "fps": 24,
+    "freeze_at": -1,
+    "duration": 2.2,
+    "angle": 14,
+    "zoom": 0.35,
+    "ramp": 0.5,
+    "flash": true,
+    "motion_blur": true,
+    "relief": 0.25,
+    "fov": 60
+   }
+  },
+  {
+   "id": 11,
+   "type": "CreateVideo",
+   "pos": [
+    2421.57265625,
+    90
+   ],
+   "size": [
+    270,
+    150
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 13
+    },
+    {
+     "localized_name": "audio",
+     "name": "audio",
+     "shape": 7,
+     "type": "AUDIO",
+     "link": null
+    },
+    {
+     "localized_name": "fps",
+     "name": "fps",
+     "type": "FLOAT",
+     "widget": {
+      "name": "fps"
+     },
+     "link": 14
+    },
+    {
+     "localized_name": "bit_depth",
+     "name": "bit_depth",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "bit_depth"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "color_space",
+     "name": "color_space",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "color_space"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "codec",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "codec"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "VIDEO",
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      15
+     ]
+    }
+   ],
+   "title": "Encode",
+   "properties": {
+    "Node name for S&R": "CreateVideo"
+   },
+   "widgets_values": [
+    30,
+    "auto",
+    "sRGB",
+    "none"
+   ],
+   "widgets_values_named": {
+    "fps": 30,
+    "bit_depth": "auto",
+    "color_space": "sRGB",
+    "codec": "none"
+   }
+  },
+  {
+   "id": 12,
+   "type": "SaveVideo",
+   "pos": [
+    2751.57265625,
+    90
+   ],
+   "size": [
+    270,
+    106
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "link": 15
+    },
+    {
+     "localized_name": "filename_prefix",
+     "name": "filename_prefix",
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "format",
+     "name": "format",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "format.codec",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format.codec"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "codec",
+     "shape": 7,
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "codec"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "links": null
+    }
+   ],
+   "title": "Save",
+   "properties": {},
+   "widgets_values": [
+    "lidarlab/bullet_time",
+    "auto",
+    "auto",
+    "auto"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "lidarlab/bullet_time",
+    "format": "auto",
+    "format.codec": "auto",
+    "codec": "auto"
+   }
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   2,
+   0,
+   "VIDEO"
+  ],
+  [
+   2,
+   2,
+   0,
+   3,
+   0,
+   "VIDEO"
+  ],
+  [
+   3,
+   3,
+   0,
+   4,
+   0,
+   "IMAGE"
+  ],
+  [
+   4,
+   5,
+   0,
+   6,
+   0,
+   "BACKGROUND_REMOVAL"
+  ],
+  [
+   5,
+   4,
+   0,
+   6,
+   1,
+   "IMAGE"
+  ],
+  [
+   6,
+   7,
+   0,
+   8,
+   0,
+   "DA3_MODEL"
+  ],
+  [
+   7,
+   4,
+   0,
+   8,
+   1,
+   "IMAGE"
+  ],
+  [
+   8,
+   8,
+   0,
+   9,
+   0,
+   "DA3_GEOMETRY"
+  ],
+  [
+   9,
+   4,
+   0,
+   10,
+   0,
+   "IMAGE"
+  ],
+  [
+   10,
+   6,
+   0,
+   10,
+   1,
+   "MASK"
+  ],
+  [
+   11,
+   9,
+   0,
+   10,
+   2,
+   "DA3_GEOMETRY"
+  ],
+  [
+   12,
+   3,
+   2,
+   10,
+   4,
+   "FLOAT"
+  ],
+  [
+   13,
+   10,
+   0,
+   11,
+   0,
+   "IMAGE"
+  ],
+  [
+   14,
+   3,
+   2,
+   11,
+   2,
+   "FLOAT"
+  ],
+  [
+   15,
+   11,
+   0,
+   12,
+   0,
+   "VIDEO"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.9,
+   "offset": [
+    416,
+    110
+   ]
+  },
+  "linearMode": true,
+  "linearData": {
+   "inputs": [
+    [
+     1,
+     "file"
+    ],
+    [
+     2,
+     "start_time"
+    ],
+    [
+     2,
+     "duration"
+    ],
+    [
+     10,
+     "angle"
+    ],
+    [
+     10,
+     "duration"
+    ],
+    [
+     10,
+     "zoom"
+    ],
+    [
+     10,
+     "freeze_at"
+    ]
+   ],
+   "outputs": [
+    12
+   ]
+  }
+ },
+ "version": 0.4
+}

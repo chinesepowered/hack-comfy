@@ -40,15 +40,17 @@ def _point_colors(style, tint, rgb, qd):
     if style == "thermal":
         return _inferno(0.15 + 0.85 * (0.65 * (1 - qd) + 0.35 * luma[:, 0])) * 1.1
     t = torch.tensor(tint)
-    return t * (0.35 + 1.2 * luma) * (0.5 + 0.9 * near ** 1.2)
+    return t * (0.42 + 1.25 * luma) * (0.55 + 0.95 * near ** 1.2)
 
 
 def _sweep_coord(kind, d, d0, d1, H, W):
     if kind.startswith("depth"):
         # log-depth so the front travels at a perceptually even pace; far haze may exceed 1
         q = (torch.log(d.clamp_min(1e-4)) - math.log(d0)) / max(math.log(d1) - math.log(d0), 1e-6)
-        q = q.clamp(-0.05, 1.15)
-        return 1.1 - q if "far to near" in kind else q
+        q = q.clamp_min(0.0)
+        # soft-compress the far tail so distant haze is swept progressively instead of lighting up at once
+        q = torch.where(q > 1, 1 + 0.25 * torch.tanh((q - 1) / 0.25), q)
+        return 1.25 - q if "far to near" in kind else q
     u, v = G.pixel_grid(H, W)
     if kind == "left to right":
         return u / (W - 1)
@@ -77,8 +79,9 @@ def lidar_scan(images: torch.Tensor, depth: torch.Tensor, sky: torch.Tensor | No
     d0, d1 = G.robust_range(sample, gmask, 0.02, 0.97)
 
     # scanline sampling pattern (LiDAR "rings")
-    step_v = max(1, int(density))
-    step_u = max(1, int(round(density * 0.6)))
+    res = H / 720.0  # density is specified for 720p; keep the look consistent at other sizes
+    step_v = max(1, int(round(density * res)))
+    step_u = max(1, int(round(density * 0.6 * res)))
     pattern = torch.zeros(H, W, dtype=torch.bool)
     pattern[::step_v, ::step_u] = True
     band_pattern = torch.zeros(H, W, dtype=torch.bool)
@@ -86,8 +89,8 @@ def lidar_scan(images: torch.Tensor, depth: torch.Tensor, sky: torch.Tensor | No
     uu, vv = G.pixel_grid(H, W)
     uu_f, vv_f = uu.reshape(-1), vv.reshape(-1)
 
-    band = 0.035
-    q_end = 1.0 + 3 * band              # sky / dropped pixels sit just past the far plane
+    band = 0.025
+    q_end = 1.25 + 3 * band             # sky / dropped pixels sit just past the far plane
     t_in0, t_in1 = scan_start, scan_start + scan_duration
     t_hold1 = t_in1 + hold
     t_out1 = t_hold1 + (scan_duration if return_to_video else 0.0)
@@ -118,18 +121,25 @@ def lidar_scan(images: torch.Tensor, depth: torch.Tensor, sky: torch.Tensor | No
                 progress(i + 1, T)
             continue
 
-        # camera move only while the whole frame is a point cloud
-        cam = 0.0
-        if t_in1 <= t < t_hold1 and hold > 0:
+        # the camera starts drifting during the sweep (parallax sells the 3D early), swings during the hold
+        # and settles back before the reverse sweep so the hand-off to video is seamless
+        drift = 0.06
+        if t_in0 <= t < t_in1:
+            cam = drift * G.ease_in_out((t - t_in0) / scan_duration)
+        elif t_in1 <= t < t_hold1 and hold > 0:
             x = (t - t_in1) / hold
-            cam = math.sin(math.pi * x) if return_to_video else G.ease_in_out(min(1.0, x * 1.4))
-        elif t >= t_hold1 and not return_to_video and hold > 0:
+            cam = drift + (1 - drift) * (math.sin(math.pi * x) if return_to_video else G.ease_in_out(min(1.0, x * 1.4)))
+        elif t >= t_hold1 and not return_to_video:
             cam = 1.0
+        elif t_hold1 <= t < t_out1:
+            cam = drift * (1 - G.ease_in_out((t - t_hold1) / scan_duration))
+        else:
+            cam = 0.0
         cam *= camera_amount
 
         keep = torch.ones(H, W, dtype=torch.bool) if not (drop_sky and ground is not None) else ground[i]
-        q = _sweep_coord(sweep, d, d0, d1, H, W).clamp(0.0, 1.0)
-        q = torch.where(keep, q, torch.full_like(q, 1.0 + 2 * band))
+        q = _sweep_coord(sweep, d, d0, d1, H, W).clamp(0.0, 1.25)
+        q = torch.where(keep, q, torch.full_like(q, 1.25 + 2 * band))
         qd = G.normalize_depth(d, d0, d1)
         scanned_any = q < front - band
         scanned = scanned_any & keep
@@ -177,12 +187,13 @@ def lidar_scan(images: torch.Tensor, depth: torch.Tensor, sky: torch.Tensor | No
             P = G.transform(pts(bidx), Rm, tv)
             u, v, z, ok = G.project(P, K)
             hot = torch.tensor(tint) * 0.6 + 0.6 if style != "rgb" else torch.tensor([0.9, 0.95, 1.0])
-            cols = hot.expand(int(ok.sum()), 3) * 1.25
+            cols = hot.expand(int(ok.sum()), 3) * 1.0
             layer = layer + R.splat_add(u[ok], v[ok], cols, H, W, size=1)
-        layer = R.bloom(layer, strength=0.55 * glow, radius=6)
+        # bloom only the hot parts (laser band, silhouette edges) so the points stay crisp on black
+        layer = R.bloom(layer, strength=0.9 * glow, radius=7, threshold=0.42)
         layer = R.tonemap(layer)
 
-        if cam > 1e-4:
+        if not sweeping:
             frame = layer
         else:
             vis = (~scanned_any).float()[..., None]  # video still visible where not yet scanned

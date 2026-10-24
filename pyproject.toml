@@ -1,0 +1,12 @@
+[project]
+name = "lidar-lab"
+description = "Open-source Higgsfield-style video effects for ComfyUI: LiDAR scan, clones, vanish and bullet time. Open weights only, runs on a CPU."
+version = "0.1.0"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/chinesepowered/hack-comfy"
+
+[tool.comfy]
+DisplayName = "LiDAR Lab"

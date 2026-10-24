@@ -1,0 +1,958 @@
+{
+ "id": "25881ebc-a37b-4314-849b-22dceee42ad7",
+ "revision": 0,
+ "last_node_id": 9,
+ "last_link_id": 14,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "LoadVideo",
+   "pos": [
+    60,
+    90
+   ],
+   "size": [
+    282.798828125,
+    233.0743408203125
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "file",
+     "name": "file",
+     "type": "COMBO",
+     "widget": {
+      "name": "file"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "choose file to upload",
+     "name": "upload",
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "VIDEO",
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      1
+     ]
+    }
+   ],
+   "title": "Input clip",
+   "properties": {
+    "Node name for S&R": "LoadVideo"
+   },
+   "widgets_values": [
+    "lidarlab_sample.mp4",
+    "image"
+   ],
+   "widgets_values_named": {
+    "file": "lidarlab_sample.mp4",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 2,
+   "type": "Video Slice",
+   "pos": [
+    402.798828125,
+    90
+   ],
+   "size": [
+    270,
+    106
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "link": 1
+    },
+    {
+     "localized_name": "start_time",
+     "name": "start_time",
+     "type": "FLOAT",
+     "widget": {
+      "name": "start_time"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "duration",
+     "name": "duration",
+     "type": "FLOAT",
+     "widget": {
+      "name": "duration"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "strict_duration",
+     "name": "strict_duration",
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "strict_duration"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "VIDEO",
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      2
+     ]
+    }
+   ],
+   "title": "Trim",
+   "properties": {
+    "Node name for S&R": "Video Slice"
+   },
+   "widgets_values": [
+    0,
+    8,
+    false
+   ],
+   "widgets_values_named": {
+    "start_time": 0,
+    "duration": 8,
+    "strict_duration": false
+   }
+  },
+  {
+   "id": 3,
+   "type": "GetVideoComponents",
+   "pos": [
+    732.798828125,
+    90
+   ],
+   "size": [
+    193.530859375,
+    106
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "link": 2
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "links": [
+      3
+     ]
+    },
+    {
+     "localized_name": "audio",
+     "name": "audio",
+     "type": "AUDIO",
+     "links": [
+      13
+     ]
+    },
+    {
+     "localized_name": "fps",
+     "name": "fps",
+     "type": "FLOAT",
+     "links": [
+      10,
+      12
+     ]
+    },
+    {
+     "localized_name": "bit_depth",
+     "name": "bit_depth",
+     "type": "COMBO",
+     "links": null
+    },
+    {
+     "localized_name": "color_space",
+     "name": "color_space",
+     "type": "COMBO",
+     "links": null
+    }
+   ],
+   "title": "Frames + audio + fps",
+   "properties": {
+    "Node name for S&R": "GetVideoComponents"
+   }
+  },
+  {
+   "id": 4,
+   "type": "ImageScaleToMaxDimension",
+   "pos": [
+    986.3296875,
+    90
+   ],
+   "size": [
+    303.4400390625,
+    82
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 3
+    },
+    {
+     "localized_name": "upscale_method",
+     "name": "upscale_method",
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "largest_size",
+     "name": "largest_size",
+     "type": "INT",
+     "widget": {
+      "name": "largest_size"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      4,
+      5,
+      7
+     ]
+    }
+   ],
+   "title": "Working resolution",
+   "properties": {
+    "Node name for S&R": "ImageScaleToMaxDimension"
+   },
+   "widgets_values": [
+    "area",
+    1280
+   ],
+   "widgets_values_named": {
+    "upscale_method": "area",
+    "largest_size": 1280
+   }
+  },
+  {
+   "id": 5,
+   "type": "LidarLabCleanPlate",
+   "pos": [
+    1349.7697265625,
+    90
+   ],
+   "size": [
+    278.194921875,
+    102
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 4
+    },
+    {
+     "localized_name": "masks",
+     "name": "masks",
+     "shape": 7,
+     "type": "MASK",
+     "link": null
+    },
+    {
+     "localized_name": "max_samples",
+     "name": "max_samples",
+     "type": "INT",
+     "widget": {
+      "name": "max_samples"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "refine",
+     "name": "refine",
+     "type": "INT",
+     "widget": {
+      "name": "refine"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "plate",
+     "name": "plate",
+     "type": "IMAGE",
+     "links": [
+      6,
+      9
+     ]
+    }
+   ],
+   "title": "Clean plate",
+   "properties": {
+    "Node name for S&R": "LidarLabCleanPlate"
+   },
+   "widgets_values": [
+    64,
+    2
+   ],
+   "widgets_values_named": {
+    "max_samples": 64,
+    "refine": 2
+   }
+  },
+  {
+   "id": 6,
+   "type": "LidarLabSubjectMatte",
+   "pos": [
+    1687.9646484374998,
+    90
+   ],
+   "size": [
+    277.5181640625,
+    150
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 5
+    },
+    {
+     "localized_name": "plate",
+     "name": "plate",
+     "type": "IMAGE",
+     "link": 6
+    },
+    {
+     "localized_name": "threshold",
+     "name": "threshold",
+     "type": "FLOAT",
+     "widget": {
+      "name": "threshold"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "softness",
+     "name": "softness",
+     "type": "FLOAT",
+     "widget": {
+      "name": "softness"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "grow",
+     "name": "grow",
+     "type": "INT",
+     "widget": {
+      "name": "grow"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "max_subjects",
+     "name": "max_subjects",
+     "type": "INT",
+     "widget": {
+      "name": "max_subjects"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "masks",
+     "name": "masks",
+     "type": "MASK",
+     "links": [
+      8
+     ]
+    }
+   ],
+   "title": "Subject matte",
+   "properties": {
+    "Node name for S&R": "LidarLabSubjectMatte"
+   },
+   "widgets_values": [
+    0.1,
+    1,
+    2,
+    2
+   ],
+   "widgets_values_named": {
+    "threshold": 0.1,
+    "softness": 1,
+    "grow": 2,
+    "max_subjects": 2
+   }
+  },
+  {
+   "id": 7,
+   "type": "LidarLabVanish",
+   "pos": [
+    2025.4828125,
+    90
+   ],
+   "size": [
+    270,
+    386
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 7
+    },
+    {
+     "localized_name": "masks",
+     "name": "masks",
+     "type": "MASK",
+     "link": 8
+    },
+    {
+     "localized_name": "plate",
+     "name": "plate",
+     "type": "IMAGE",
+     "link": 9
+    },
+    {
+     "localized_name": "fps",
+     "name": "fps",
+     "type": "FLOAT",
+     "widget": {
+      "name": "fps"
+     },
+     "link": 10
+    },
+    {
+     "localized_name": "start",
+     "name": "start",
+     "type": "FLOAT",
+     "widget": {
+      "name": "start"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "duration",
+     "name": "duration",
+     "type": "FLOAT",
+     "widget": {
+      "name": "duration"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "direction",
+     "name": "direction",
+     "type": "COMBO",
+     "widget": {
+      "name": "direction"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "particles",
+     "name": "particles",
+     "type": "COMBO",
+     "widget": {
+      "name": "particles"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "color",
+     "name": "color",
+     "type": "COLOR",
+     "widget": {
+      "name": "color"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "wind_angle",
+     "name": "wind_angle",
+     "type": "FLOAT",
+     "widget": {
+      "name": "wind_angle"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "wind_speed",
+     "name": "wind_speed",
+     "type": "FLOAT",
+     "widget": {
+      "name": "wind_speed"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "turbulence",
+     "name": "turbulence",
+     "type": "FLOAT",
+     "widget": {
+      "name": "turbulence"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "density",
+     "name": "density",
+     "type": "FLOAT",
+     "widget": {
+      "name": "density"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "freeze_subject",
+     "name": "freeze_subject",
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "freeze_subject"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "seed",
+     "name": "seed",
+     "type": "INT",
+     "widget": {
+      "name": "seed"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "links": [
+      11
+     ]
+    }
+   ],
+   "title": "Vanish",
+   "properties": {
+    "Node name for S&R": "LidarLabVanish"
+   },
+   "widgets_values": [
+    24,
+    0.8,
+    2,
+    "left to right",
+    "ash",
+    "#ff7a2f",
+    -20,
+    1,
+    1,
+    0.45,
+    true,
+    0,
+    "randomize"
+   ],
+   "widgets_values_named": {
+    "fps": 24,
+    "start": 0.8,
+    "duration": 2,
+    "direction": "left to right",
+    "particles": "ash",
+    "color": "#ff7a2f",
+    "wind_angle": -20,
+    "wind_speed": 1,
+    "turbulence": 1,
+    "density": 0.45,
+    "freeze_subject": true,
+    "seed": 0,
+    "control_after_generate": "randomize"
+   }
+  },
+  {
+   "id": 8,
+   "type": "CreateVideo",
+   "pos": [
+    2355.4828125,
+    90
+   ],
+   "size": [
+    270,
+    150
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 11
+    },
+    {
+     "localized_name": "audio",
+     "name": "audio",
+     "shape": 7,
+     "type": "AUDIO",
+     "link": 13
+    },
+    {
+     "localized_name": "fps",
+     "name": "fps",
+     "type": "FLOAT",
+     "widget": {
+      "name": "fps"
+     },
+     "link": 12
+    },
+    {
+     "localized_name": "bit_depth",
+     "name": "bit_depth",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "bit_depth"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "color_space",
+     "name": "color_space",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "color_space"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "codec",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "codec"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "VIDEO",
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      14
+     ]
+    }
+   ],
+   "title": "Encode",
+   "properties": {
+    "Node name for S&R": "CreateVideo"
+   },
+   "widgets_values": [
+    30,
+    "auto",
+    "sRGB",
+    "none"
+   ],
+   "widgets_values_named": {
+    "fps": 30,
+    "bit_depth": "auto",
+    "color_space": "sRGB",
+    "codec": "none"
+   }
+  },
+  {
+   "id": 9,
+   "type": "SaveVideo",
+   "pos": [
+    2685.4828125,
+    90
+   ],
+   "size": [
+    270,
+    106
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "link": 14
+    },
+    {
+     "localized_name": "filename_prefix",
+     "name": "filename_prefix",
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "format",
+     "name": "format",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "format.codec",
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "format.codec"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "codec",
+     "name": "codec",
+     "shape": 7,
+     "type": "COMFY_DYNAMICCOMBO_V3",
+     "widget": {
+      "name": "codec"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "video",
+     "name": "video",
+     "type": "VIDEO",
+     "links": null
+    }
+   ],
+   "title": "Save",
+   "properties": {},
+   "widgets_values": [
+    "lidarlab/vanish",
+    "auto",
+    "auto",
+    "auto"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "lidarlab/vanish",
+    "format": "auto",
+    "format.codec": "auto",
+    "codec": "auto"
+   }
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   2,
+   0,
+   "VIDEO"
+  ],
+  [
+   2,
+   2,
+   0,
+   3,
+   0,
+   "VIDEO"
+  ],
+  [
+   3,
+   3,
+   0,
+   4,
+   0,
+   "IMAGE"
+  ],
+  [
+   4,
+   4,
+   0,
+   5,
+   0,
+   "IMAGE"
+  ],
+  [
+   5,
+   4,
+   0,
+   6,
+   0,
+   "IMAGE"
+  ],
+  [
+   6,
+   5,
+   0,
+   6,
+   1,
+   "IMAGE"
+  ],
+  [
+   7,
+   4,
+   0,
+   7,
+   0,
+   "IMAGE"
+  ],
+  [
+   8,
+   6,
+   0,
+   7,
+   1,
+   "MASK"
+  ],
+  [
+   9,
+   5,
+   0,
+   7,
+   2,
+   "IMAGE"
+  ],
+  [
+   10,
+   3,
+   2,
+   7,
+   3,
+   "FLOAT"
+  ],
+  [
+   11,
+   7,
+   0,
+   8,
+   0,
+   "IMAGE"
+  ],
+  [
+   12,
+   3,
+   2,
+   8,
+   2,
+   "FLOAT"
+  ],
+  [
+   13,
+   3,
+   1,
+   8,
+   1,
+   "AUDIO"
+  ],
+  [
+   14,
+   8,
+   0,
+   9,
+   0,
+   "VIDEO"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.9,
+   "offset": [
+    416,
+    110
+   ]
+  },
+  "linearMode": true,
+  "linearData": {
+   "inputs": [
+    [
+     1,
+     "file"
+    ],
+    [
+     2,
+     "start_time"
+    ],
+    [
+     2,
+     "duration"
+    ],
+    [
+     7,
+     "particles"
+    ],
+    [
+     7,
+     "direction"
+    ],
+    [
+     7,
+     "start"
+    ],
+    [
+     7,
+     "duration"
+    ]
+   ],
+   "outputs": [
+    9
+   ]
+  }
+ },
+ "version": 0.4
+}
