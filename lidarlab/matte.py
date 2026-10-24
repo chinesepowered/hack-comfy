@@ -114,7 +114,7 @@ def difference_matte(images: torch.Tensor, plate: torch.Tensor, threshold: float
 
 
 def mask_stats(masks: torch.Tensor):
-    """Per-frame centroid (x,y in px), top y, area for (T,H,W) masks."""
+    """Per-frame centroid (x,y in px), top y, area and bottom y for (T,H,W) masks."""
     T, H, W = masks.shape
     ys = torch.arange(H, dtype=torch.float32)[:, None]
     xs = torch.arange(W, dtype=torch.float32)[None, :]
@@ -123,7 +123,8 @@ def mask_stats(masks: torch.Tensor):
     cy = (masks * ys).sum((1, 2)) / area
     rows = (masks > 0.5).any(2)
     top = torch.where(rows.any(1), rows.float().argmax(1).float(), torch.full((T,), float(H)))
-    return cx, cy, top, area
+    bottom = torch.where(rows.any(1), (H - 1 - rows.flip(1).float().argmax(1)).float(), torch.full((T,), float(H)))
+    return cx, cy, top, area, bottom
 
 
 # --------------------------------------------------------------------------- BiRefNet (any camera)

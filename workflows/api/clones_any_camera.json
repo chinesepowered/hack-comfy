@@ -1,0 +1,141 @@
+{
+  "1": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "example.mp4"
+    },
+    "_meta": {
+      "title": "Input clip"
+    }
+  },
+  "2": {
+    "class_type": "Video Slice",
+    "inputs": {
+      "video": [
+        "1",
+        0
+      ],
+      "start_time": 0.0,
+      "duration": 8.0,
+      "strict_duration": false
+    },
+    "_meta": {
+      "title": "Trim"
+    }
+  },
+  "3": {
+    "class_type": "GetVideoComponents",
+    "inputs": {
+      "video": [
+        "2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "Frames + audio + fps"
+    }
+  },
+  "4": {
+    "class_type": "ImageScaleToMaxDimension",
+    "inputs": {
+      "image": [
+        "3",
+        0
+      ],
+      "upscale_method": "area",
+      "largest_size": 1280
+    },
+    "_meta": {
+      "title": "Working resolution"
+    }
+  },
+  "5": {
+    "class_type": "LoadBackgroundRemovalModel",
+    "inputs": {
+      "bg_removal_name": "birefnet.safetensors"
+    },
+    "_meta": {
+      "title": "BiRefNet"
+    }
+  },
+  "6": {
+    "class_type": "LidarLabBiRefNetMatte",
+    "inputs": {
+      "bg_removal_model": [
+        "5",
+        0
+      ],
+      "images": [
+        "4",
+        0
+      ],
+      "resolution": 768,
+      "stride": 2
+    },
+    "_meta": {
+      "title": "Subject matte (any camera)"
+    }
+  },
+  "7": {
+    "class_type": "LidarLabClones",
+    "inputs": {
+      "images": [
+        "4",
+        0
+      ],
+      "masks": [
+        "6",
+        0
+      ],
+      "fps": [
+        "3",
+        2
+      ],
+      "mode": "stamp",
+      "look": "rainbow",
+      "count": 10,
+      "interval": 0.25,
+      "start": 0.0,
+      "end": 0.0,
+      "fade": 0.65
+    },
+    "_meta": {
+      "title": "Clones"
+    }
+  },
+  "8": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "7",
+        0
+      ],
+      "fps": [
+        "3",
+        2
+      ],
+      "audio": [
+        "3",
+        1
+      ]
+    },
+    "_meta": {
+      "title": "Encode"
+    }
+  },
+  "9": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "8",
+        0
+      ],
+      "filename_prefix": "lidarlab/clones",
+      "format": "auto",
+      "codec": "auto"
+    },
+    "_meta": {
+      "title": "Save"
+    }
+  }
+}

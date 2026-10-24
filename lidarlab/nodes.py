@@ -7,7 +7,7 @@ from typing_extensions import override
 import comfy.utils
 from comfy_api.latest import ComfyExtension, io
 
-from . import fx_clones, fx_lidar, fx_vanish
+from . import fx_bullet, fx_clones, fx_lidar, fx_vanish
 from . import geometry as G
 from . import matte as M
 
@@ -263,7 +263,50 @@ class Vanish(io.ComfyNode):
         return io.NodeOutput(out)
 
 
-NODES = [StabilizeVideoDepth, CleanPlate, SubjectMatte, BiRefNetVideoMatte, LidarScan, Clones, Vanish]
+class BulletTime(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="LidarLabBulletTime",
+            display_name="Bullet Time 2.5D",
+            category=FX,
+            search_aliases=["bullet time", "matrix", "freeze frame", "orbit", "frozen in motion", "higgsfield"],
+            description="Slows into the decisive moment (auto: the top of a jump), freezes it and swings the camera "
+                        "around the subject using Depth Anything 3 geometry, then lets time run again. "
+                        "The output is longer than the input by the freeze duration.",
+            inputs=[
+                io.Image.Input("images"),
+                io.Mask.Input("masks"),
+                DA3Geometry.Input("da3_geometry"),
+                _fps_input(),
+                io.Image.Input("plate", optional=True, tooltip="Clean plate for tripod shots; without it the background behind the subject is filled smoothly."),
+                io.Float.Input("freeze_at", default=-1.0, min=-1.0, max=600.0, step=0.05, tooltip="Seconds; -1 = automatic (top of the jump)."),
+                io.Float.Input("duration", default=2.2, min=0.3, max=20.0, step=0.05),
+                io.Float.Input("angle", default=14.0, min=-60.0, max=60.0, step=0.5),
+                io.Float.Input("zoom", default=0.35, min=0.0, max=1.5, step=0.05),
+                io.Float.Input("ramp", default=0.5, min=0.0, max=5.0, step=0.05, tooltip="Seconds of slow motion into and out of the freeze."),
+                io.Boolean.Input("flash", default=True),
+                io.Boolean.Input("motion_blur", default=True),
+                io.Float.Input("relief", default=0.25, min=0.0, max=1.0, step=0.05, advanced=True,
+                               tooltip="How much of the subject's own depth relief to keep (0 = flat cut-out)."),
+                io.Float.Input("fov", default=60.0, min=20.0, max=120.0, step=1.0, advanced=True),
+            ],
+            outputs=[io.Image.Output("images")],
+        )
+
+    @classmethod
+    def execute(cls, images, masks, da3_geometry, fps, freeze_at, duration, angle, zoom, ramp, flash, motion_blur,
+                relief, fov, plate=None) -> io.NodeOutput:
+        imgs = images[..., :3].float()
+        depth, _ = _depth_from(da3_geometry, imgs.shape[0])
+        out = fx_bullet.bullet_time(imgs, masks, depth, fps, plate=None if plate is None else plate[0, ..., :3].float(),
+                                    freeze_at=freeze_at, duration=duration, angle=angle, zoom=zoom, ramp=ramp,
+                                    flash=flash, motion_blur=motion_blur, relief=relief, fov=fov,
+                                    progress=_pbar(max(2, int(round(duration * fps)))))
+        return io.NodeOutput(out)
+
+
+NODES = [StabilizeVideoDepth, CleanPlate, SubjectMatte, BiRefNetVideoMatte, LidarScan, Clones, Vanish, BulletTime]
 
 
 class LidarLabExtension(ComfyExtension):
