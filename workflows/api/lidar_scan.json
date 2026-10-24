@@ -60,38 +60,25 @@
     }
   },
   "6": {
-    "class_type": "DA3Inference",
+    "class_type": "LidarLabVideoDepth",
     "inputs": {
       "da3_model": [
         "5",
         0
       ],
-      "image": [
+      "images": [
         "4",
         0
       ],
       "resolution": 504,
-      "resize_method": "upper_bound_resize",
-      "mode": "mono"
+      "frame_stride": 1,
+      "temporal_smoothing": 0.6
     },
     "_meta": {
       "title": "Video depth"
     }
   },
   "7": {
-    "class_type": "LidarLabStabilizeDepth",
-    "inputs": {
-      "da3_geometry": [
-        "6",
-        0
-      ],
-      "temporal_smoothing": 0.6
-    },
-    "_meta": {
-      "title": "Stabilize depth"
-    }
-  },
-  "8": {
     "class_type": "LidarLabScan",
     "inputs": {
       "images": [
@@ -99,7 +86,7 @@
         0
       ],
       "da3_geometry": [
-        "7",
+        "6",
         0
       ],
       "fps": [
@@ -124,11 +111,11 @@
       "title": "LiDAR Scan"
     }
   },
-  "9": {
+  "8": {
     "class_type": "CreateVideo",
     "inputs": {
       "images": [
-        "8",
+        "7",
         0
       ],
       "fps": [
@@ -144,11 +131,11 @@
       "title": "Encode"
     }
   },
-  "10": {
+  "9": {
     "class_type": "SaveVideo",
     "inputs": {
       "video": [
-        "9",
+        "8",
         0
       ],
       "filename_prefix": "lidarlab/lidar_scan",

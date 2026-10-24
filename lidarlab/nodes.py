@@ -38,6 +38,66 @@ def _depth_from(geometry: dict, T: int):
 
 # --------------------------------------------------------------------------- utils
 
+class VideoDepth(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="LidarLabVideoDepth",
+            display_name="Video Depth (Depth Anything 3)",
+            category=UTIL,
+            search_aliases=["video depth", "depth anything 3", "da3", "lidar", "depth video"],
+            description="Runs ComfyUI's native Depth Anything 3 over a whole clip with a progress bar, optionally on every "
+                        "Nth frame (interpolating in between), then removes frame-to-frame flicker. Outputs standard "
+                        "DA3_GEOMETRY plus a depth preview.",
+            inputs=[
+                io.Custom("DA3_MODEL").Input("da3_model", tooltip="From Load Depth Anything 3 (Mono-Large recommended; bf16 on CPU)."),
+                io.Image.Input("images"),
+                io.Int.Input("resolution", default=504, min=140, max=2520, step=14),
+                io.Int.Input("frame_stride", default=1, min=1, max=6,
+                             tooltip="Estimate depth on every Nth frame and interpolate the rest. 2 roughly halves the time."),
+                io.Float.Input("temporal_smoothing", default=0.6, min=0.0, max=0.95, step=0.05),
+            ],
+            outputs=[DA3Geometry.Output("da3_geometry"), io.Image.Output("depth_preview")],
+        )
+
+    @classmethod
+    def execute(cls, da3_model, images, resolution, frame_stride, temporal_smoothing) -> io.NodeOutput:
+        from comfy_extras.nodes_depth_anything_3 import _run_da3
+        imgs = images[..., :3]
+        T = imgs.shape[0]
+        keys = list(range(0, T, frame_stride))
+        if keys[-1] != T - 1:
+            keys.append(T - 1)
+        bar = comfy.utils.ProgressBar(len(keys))
+        kd, ks = {}, {}
+        for n in range(0, len(keys), 4):
+            chunk = keys[n:n + 4]
+            depth, _, sky = _run_da3(da3_model, imgs[chunk], resolution)
+            for j, k in enumerate(chunk):
+                kd[k] = depth[j]
+                ks[k] = sky[j] if sky is not None else None
+            bar.update_absolute(min(n + 4, len(keys)), len(keys))
+        depth = torch.empty(T, *kd[keys[0]].shape)
+        sky = None if ks[keys[0]] is None else torch.empty_like(depth)
+        for a, b in zip(keys[:-1], keys[1:]):
+            for i in range(a, b + 1):
+                w = 0.0 if b == a else (i - a) / (b - a)
+                depth[i] = kd[a] * (1 - w) + kd[b] * w
+                if sky is not None:
+                    sky[i] = ks[a] * (1 - w) + ks[b] * w
+        if len(keys) == 1:
+            depth[0] = kd[keys[0]]
+            if sky is not None:
+                sky[0] = ks[keys[0]]
+        depth = G.stabilize_depth(depth, sky, temporal=temporal_smoothing)
+        geometry = {"depth": depth.contiguous(), "image": imgs.cpu(), "mode": "mono"}
+        if sky is not None:
+            geometry["sky"] = sky.contiguous()
+        d0, d1 = G.robust_range(depth[:: max(1, T // 8)], None if sky is None else sky[:: max(1, T // 8)] < 0.5)
+        prev = 1.0 - G.normalize_depth(depth, d0, d1)
+        return io.NodeOutput(geometry, prev[..., None].expand(-1, -1, -1, 3).contiguous())
+
+
 class StabilizeVideoDepth(io.ComfyNode):
     @classmethod
     def define_schema(cls):
@@ -307,7 +367,7 @@ class BulletTime(io.ComfyNode):
         return io.NodeOutput(out)
 
 
-NODES = [StabilizeVideoDepth, CleanPlate, SubjectMatte, BiRefNetVideoMatte, LidarScan, Clones, Vanish, BulletTime]
+NODES = [VideoDepth, StabilizeVideoDepth, CleanPlate, SubjectMatte, BiRefNetVideoMatte, LidarScan, Clones, Vanish, BulletTime]
 
 
 class LidarLabExtension(ComfyExtension):

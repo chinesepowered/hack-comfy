@@ -1,8 +1,8 @@
 {
- "id": "0a804c5f-47d0-471c-9a57-4da733240cad",
+ "id": "ce7fb9b0-4de7-4380-ac60-5f65ac28a825",
  "revision": 0,
- "last_node_id": 12,
- "last_link_id": 15,
+ "last_node_id": 11,
+ "last_link_id": 14,
  "nodes": [
   {
    "id": 1,
@@ -177,8 +177,8 @@
      "name": "fps",
      "type": "FLOAT",
      "links": [
-      12,
-      14
+      11,
+      13
      ]
     },
     {
@@ -247,7 +247,7 @@
      "links": [
       5,
       7,
-      9
+      8
      ]
     }
    ],
@@ -362,7 +362,7 @@
      "name": "masks",
      "type": "MASK",
      "links": [
-      10
+      9
      ]
     }
    ],
@@ -438,13 +438,13 @@
   },
   {
    "id": 8,
-   "type": "DA3Inference",
+   "type": "LidarLabVideoDepth",
    "pos": [
     1388.6628906249998,
     282
    ],
    "size": [
-    270,
+    310.9869140625,
     126
    ],
    "flags": {},
@@ -458,8 +458,8 @@
      "link": 6
     },
     {
-     "localized_name": "image",
-     "name": "image",
+     "localized_name": "images",
+     "name": "images",
      "type": "IMAGE",
      "link": 7
     },
@@ -473,69 +473,13 @@
      "link": null
     },
     {
-     "localized_name": "resize_method",
-     "name": "resize_method",
-     "type": "COMBO",
+     "localized_name": "frame_stride",
+     "name": "frame_stride",
+     "type": "INT",
      "widget": {
-      "name": "resize_method"
+      "name": "frame_stride"
      },
      "link": null
-    },
-    {
-     "localized_name": "mode",
-     "name": "mode",
-     "type": "COMFY_DYNAMICCOMBO_V3",
-     "widget": {
-      "name": "mode"
-     },
-     "link": null
-    }
-   ],
-   "outputs": [
-    {
-     "localized_name": "da3_geometry",
-     "name": "da3_geometry",
-     "type": "DA3_GEOMETRY",
-     "links": [
-      8
-     ]
-    }
-   ],
-   "title": "Video depth",
-   "properties": {
-    "Node name for S&R": "DA3Inference"
-   },
-   "widgets_values": [
-    504,
-    "upper_bound_resize",
-    "mono"
-   ],
-   "widgets_values_named": {
-    "resolution": 504,
-    "resize_method": "upper_bound_resize",
-    "mode": "mono"
-   }
-  },
-  {
-   "id": 9,
-   "type": "LidarLabStabilizeDepth",
-   "pos": [
-    1752.465234375,
-    90
-   ],
-   "size": [
-    279.107421875,
-    58
-   ],
-   "flags": {},
-   "order": 8,
-   "mode": 0,
-   "inputs": [
-    {
-     "localized_name": "da3_geometry",
-     "name": "da3_geometry",
-     "type": "DA3_GEOMETRY",
-     "link": 8
     },
     {
      "localized_name": "temporal_smoothing",
@@ -553,26 +497,36 @@
      "name": "da3_geometry",
      "type": "DA3_GEOMETRY",
      "links": [
-      11
+      10
      ]
+    },
+    {
+     "localized_name": "depth_preview",
+     "name": "depth_preview",
+     "type": "IMAGE",
+     "links": null
     }
    ],
-   "title": "Stabilize depth",
+   "title": "Video depth",
    "properties": {
-    "Node name for S&R": "LidarLabStabilizeDepth"
+    "Node name for S&R": "LidarLabVideoDepth"
    },
    "widgets_values": [
+    504,
+    1,
     0.6
    ],
    "widgets_values_named": {
+    "resolution": 504,
+    "frame_stride": 1,
     "temporal_smoothing": 0.6
    }
   },
   {
-   "id": 10,
+   "id": 9,
    "type": "LidarLabBulletTime",
    "pos": [
-    2091.57265625,
+    1759.6498046875,
     90
    ],
    "size": [
@@ -580,26 +534,26 @@
     334
    ],
    "flags": {},
-   "order": 9,
+   "order": 8,
    "mode": 0,
    "inputs": [
     {
      "localized_name": "images",
      "name": "images",
      "type": "IMAGE",
-     "link": 9
+     "link": 8
     },
     {
      "localized_name": "masks",
      "name": "masks",
      "type": "MASK",
-     "link": 10
+     "link": 9
     },
     {
      "localized_name": "da3_geometry",
      "name": "da3_geometry",
      "type": "DA3_GEOMETRY",
-     "link": 11
+     "link": 10
     },
     {
      "localized_name": "plate",
@@ -615,7 +569,7 @@
      "widget": {
       "name": "fps"
      },
-     "link": 12
+     "link": 11
     },
     {
      "localized_name": "freeze_at",
@@ -705,7 +659,7 @@
      "name": "images",
      "type": "IMAGE",
      "links": [
-      13
+      12
      ]
     }
    ],
@@ -739,10 +693,10 @@
    }
   },
   {
-   "id": 11,
+   "id": 10,
    "type": "CreateVideo",
    "pos": [
-    2421.57265625,
+    2089.6498046875,
     90
    ],
    "size": [
@@ -750,14 +704,14 @@
     150
    ],
    "flags": {},
-   "order": 10,
+   "order": 9,
    "mode": 0,
    "inputs": [
     {
      "localized_name": "images",
      "name": "images",
      "type": "IMAGE",
-     "link": 13
+     "link": 12
     },
     {
      "localized_name": "audio",
@@ -773,7 +727,7 @@
      "widget": {
       "name": "fps"
      },
-     "link": 14
+     "link": 13
     },
     {
      "localized_name": "bit_depth",
@@ -812,7 +766,7 @@
      "name": "VIDEO",
      "type": "VIDEO",
      "links": [
-      15
+      14
      ]
     }
    ],
@@ -834,10 +788,10 @@
    }
   },
   {
-   "id": 12,
+   "id": 11,
    "type": "SaveVideo",
    "pos": [
-    2751.57265625,
+    2419.6498046875,
     90
    ],
    "size": [
@@ -845,14 +799,14 @@
     106
    ],
    "flags": {},
-   "order": 11,
+   "order": 10,
    "mode": 0,
    "inputs": [
     {
      "localized_name": "video",
      "name": "video",
      "type": "VIDEO",
-     "link": 15
+     "link": 14
     },
     {
      "localized_name": "filename_prefix",
@@ -975,65 +929,57 @@
   ],
   [
    8,
-   8,
-   0,
-   9,
-   0,
-   "DA3_GEOMETRY"
-  ],
-  [
-   9,
    4,
    0,
-   10,
+   9,
    0,
    "IMAGE"
   ],
   [
-   10,
+   9,
    6,
    0,
-   10,
+   9,
    1,
    "MASK"
   ],
   [
-   11,
-   9,
-   0,
    10,
+   8,
+   0,
+   9,
    2,
    "DA3_GEOMETRY"
   ],
   [
-   12,
+   11,
    3,
    2,
-   10,
+   9,
    4,
    "FLOAT"
   ],
   [
-   13,
-   10,
+   12,
+   9,
    0,
-   11,
+   10,
    0,
    "IMAGE"
   ],
   [
-   14,
+   13,
    3,
    2,
-   11,
+   10,
    2,
    "FLOAT"
   ],
   [
-   15,
-   11,
+   14,
+   10,
    0,
-   12,
+   11,
    0,
    "VIDEO"
   ]
@@ -1064,24 +1010,24 @@
      "duration"
     ],
     [
-     10,
+     9,
      "angle"
     ],
     [
-     10,
+     9,
      "duration"
     ],
     [
-     10,
+     9,
      "zoom"
     ],
     [
-     10,
+     9,
      "freeze_at"
     ]
    ],
    "outputs": [
-    12
+    11
    ]
   }
  },

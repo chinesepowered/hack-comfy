@@ -41,7 +41,7 @@ MAX_SECONDS = float(os.environ.get("LIDARLAB_MAX_SECONDS", "8"))
 
 # rough relative cost of each node type, for an honest progress bar on CPU
 WEIGHTS = {
-    "DA3Inference": 6.0, "LidarLabBiRefNetMatte": 10.0, "LidarLabSubjectMatte": 2.0, "LidarLabCleanPlate": 1.5,
+    "DA3Inference": 6.0, "LidarLabVideoDepth": 6.0, "LidarLabBiRefNetMatte": 10.0, "LidarLabSubjectMatte": 2.0, "LidarLabCleanPlate": 1.5,
     "LidarLabScan": 2.0, "LidarLabClones": 1.5, "LidarLabVanish": 2.0, "LidarLabBulletTime": 4.0,
     "LidarLabStabilizeDepth": 0.3, "CreateVideo": 0.3, "SaveVideo": 1.0, "GetVideoComponents": 0.5,
 }

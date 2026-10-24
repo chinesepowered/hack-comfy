@@ -2,9 +2,10 @@
 """Run a LiDAR Lab API workflow against a local ComfyUI over its HTTP API.
 
     python scripts/run_workflow.py workflows/api/lidar_scan.json my_clip.mp4 \
-        --set 18.style=thermal --set 2.start_time=1.5 --server http://127.0.0.1:8188
+        --set LidarLabScan.style=thermal --set "Video Slice.start_time=1.5" --server http://127.0.0.1:8188
 
-`--set NODE.INPUT=VALUE` overrides any input (VALUE is parsed as JSON when possible).
+`--set NODE.INPUT=VALUE` overrides any input (VALUE is parsed as JSON when possible). NODE is a node id
+or a class name such as LidarLabScan (applies to every node of that class).
 Prints the output files and the run time. Only uses the standard library.
 """
 from __future__ import annotations
@@ -81,7 +82,11 @@ def main():
             val = json.loads(val)
         except json.JSONDecodeError:
             pass
-        wf[nid]["inputs"][inp] = val
+        targets = [nid] if nid in wf else [k for k, v in wf.items() if v["class_type"] == nid]
+        if not targets:
+            raise SystemExit(f"no node {nid!r} in {a.workflow}")
+        for t in targets:
+            wf[t]["inputs"][inp] = val
     outs, dt = run(a.server, wf)
     print(f"done in {dt:.1f}s")
     for o in outs:

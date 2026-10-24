@@ -1,0 +1,13 @@
+{
+  "voice_id": "hA4zGnmTwX2NQiTRMt7o",
+  "voice_name": "Riley - Engaging Young Female Voice (ElevenLabs)",
+  "model_id": "eleven_v4",
+  "segments": [
+    {"id": "s1_hook", "text": "Higgsfield's most viral effects: LiDAR scans, clones, vanishing into dust, bullet time. We rebuilt them in the open, on ComfyUI."},
+    {"id": "s2_intro", "text": "This is LiDAR Lab. Four effects, each one a ComfyUI workflow, using open-weight models only. And here's the twist: there's no video diffusion, and no GPU. Everything you're seeing was rendered on a four-core cloud CPU."},
+    {"id": "s3_app", "text": "Pick an effect, drop in a clip, choose a look, and hit generate. The app runs the effect's workflow through the Comfy SDK and the local Comfy API proxy, and streams progress from every node. About a minute later you get your video, plus the exact workflow it ran, ready to remix."},
+    {"id": "s4_graph", "text": "Under the hood, it's native ComfyUI. Depth Anything 3 estimates depth for every frame. Our nodes stabilize it, lift every pixel into 3D, and render it with a tiny point-cloud renderer written in plain PyTorch. Clones and Vanish pull a clean plate from the footage itself, or use BiRefNet when the camera moves. And every preset also ships as an App Mode app."},
+    {"id": "s5_why", "text": "Why it's new: instead of asking a giant video model to hallucinate the effect, we compute it from geometry. So it's deterministic, stable from frame to frame, full resolution, and it never changes your face. And it's fast on CPUs. ComfyUI runs CPU inference in full precision, but modern Xeons have AMX, so we run Depth Anything in bfloat16, three and a half times faster."},
+    {"id": "s6_outro", "text": "LiDAR Lab is open source and open weights, and it runs anywhere ComfyUI does. Scan it. Clone it. Vaporize it."}
+  ]
+}

@@ -87,38 +87,25 @@
     }
   },
   "8": {
-    "class_type": "DA3Inference",
+    "class_type": "LidarLabVideoDepth",
     "inputs": {
       "da3_model": [
         "7",
         0
       ],
-      "image": [
+      "images": [
         "4",
         0
       ],
       "resolution": 504,
-      "resize_method": "upper_bound_resize",
-      "mode": "mono"
+      "frame_stride": 1,
+      "temporal_smoothing": 0.6
     },
     "_meta": {
       "title": "Video depth"
     }
   },
   "9": {
-    "class_type": "LidarLabStabilizeDepth",
-    "inputs": {
-      "da3_geometry": [
-        "8",
-        0
-      ],
-      "temporal_smoothing": 0.6
-    },
-    "_meta": {
-      "title": "Stabilize depth"
-    }
-  },
-  "10": {
     "class_type": "LidarLabBulletTime",
     "inputs": {
       "images": [
@@ -130,7 +117,7 @@
         0
       ],
       "da3_geometry": [
-        "9",
+        "8",
         0
       ],
       "fps": [
@@ -151,11 +138,11 @@
       "title": "Bullet Time"
     }
   },
-  "11": {
+  "10": {
     "class_type": "CreateVideo",
     "inputs": {
       "images": [
-        "10",
+        "9",
         0
       ],
       "fps": [
@@ -167,11 +154,11 @@
       "title": "Encode"
     }
   },
-  "12": {
+  "11": {
     "class_type": "SaveVideo",
     "inputs": {
       "video": [
-        "11",
+        "10",
         0
       ],
       "filename_prefix": "lidarlab/bullet_time",

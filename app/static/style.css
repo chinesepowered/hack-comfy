@@ -96,3 +96,9 @@ input[type=range] { width: 100%; accent-color: var(--cyan); }
 .btn.primary { background: var(--cyan); color: #041018; border-color: var(--cyan); font-weight: 700; }
 .error { margin-top: 18px; padding: 12px 14px; border-radius: 12px; background: rgba(255, 95, 95, .1); border: 1px solid rgba(255, 95, 95, .35); color: #ffb3b3; font-size: 13px; white-space: pre-wrap; }
 @media (max-width: 720px) { .how { grid-template-columns: 1fr; } .top { padding: 14px 16px; } main { padding: 0 16px 30px; } .sheet-panel { padding: 22px 16px; } }
+@media (max-height: 820px) and (min-width: 721px) {
+  .hero { padding: 26px 0 10px; }
+  h1 { font-size: 46px; margin-bottom: 10px; }
+  .sub { font-size: 15px; }
+  .card video { aspect-ratio: 4 / 5; }
+}

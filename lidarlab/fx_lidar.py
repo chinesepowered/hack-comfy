@@ -36,11 +36,15 @@ def _point_colors(style, tint, rgb, qd):
     luma = (rgb * torch.tensor([0.299, 0.587, 0.114])).sum(-1, keepdim=True)
     near = (1.0 - qd)[:, None]
     if style == "rgb":
-        return rgb * (0.55 + 0.75 * near)
+        # photographic point cloud: brighter, slightly saturated so sparse points still read
+        luma3 = luma.expand_as(rgb)
+        sat = (luma3 + 1.25 * (rgb - luma3)).clamp(0, 1)
+        return sat * (1.1 + 0.9 * near)
     if style == "thermal":
         return _inferno(0.15 + 0.85 * (0.65 * (1 - qd) + 0.35 * luma[:, 0])) * 1.1
     t = torch.tensor(tint)
-    return t * (0.42 + 1.25 * luma) * (0.55 + 0.95 * near ** 1.2)
+    t = t / t.max()
+    return t * (0.42 + 1.25 * luma) * (0.55 + 0.95 * near ** 1.2) * 1.15
 
 
 def _sweep_coord(kind, d, d0, d1, H, W):
@@ -182,7 +186,7 @@ def lidar_scan(images: torch.Tensor, depth: torch.Tensor, sky: torch.Tensor | No
             P = G.transform(pts(idx), Rm, tv)
             u, v, z, ok = G.project(P, K)
             cols = _point_colors(style, tint, rgb[idx], qd_f[idx]) * (1.0 + 1.3 * edge[idx])[:, None]
-            layer = R.splat_add(u[ok], v[ok], cols[ok], H, W, size=point_size)
+            layer = R.splat_add(u[ok], v[ok], cols[ok], H, W, size=max(point_size, 2) if style == "rgb" else point_size)
         if bidx.numel():
             P = G.transform(pts(bidx), Rm, tv)
             u, v, z, ok = G.project(P, K)

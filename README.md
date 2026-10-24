@@ -42,6 +42,7 @@ You can use the effects in three ways:
   - ComfyUI keeps CPU inference in fp32 (`should_use_bf16()` returns False on CPU). The workflows load Depth Anything 3 in bf16 instead, which makes it 3.4× faster.
   - The BiRefNet matte node autocasts to bf16, with an fp32 shim for torchvision's `deform_conv2d`, which has no bf16 CPU kernel.
 - **Native ComfyUI building blocks.**
+  - Depth comes from ComfyUI's own Depth Anything 3 model and loader.
   - LiDAR Lab nodes take ComfyUI's own `DA3_GEOMETRY`, `MASK` and `IMAGE` types, so you can swap in any depth or mask source (SAM 3 tracks, BiRefNet, your own roto).
   - The nodes use the V3 node API.
   - The presets use only core nodes (Load Video, Trim Video, Depth Anything 3, Remove Background, Create/Save Video) plus the LiDAR Lab effect nodes.
@@ -97,7 +98,7 @@ To run on a hosted Comfy API deployment instead, set `COMFY_BASE_URL` and `COMFY
 From the command line, without the app:
 
 ```bash
-python scripts/run_workflow.py workflows/api/lidar_scan.json my_clip.mp4 --set 8.style=thermal --set 8.camera="crane up"
+python scripts/run_workflow.py workflows/api/lidar_scan.json my_clip.mp4 --set LidarLabScan.style=thermal --set "LidarLabScan.camera=crane up"
 ```
 
 ## Nodes
@@ -108,7 +109,8 @@ python scripts/run_workflow.py workflows/api/lidar_scan.json my_clip.mp4 --set 8
 | `Clones` | `trail` (copies follow the subject) or `stamp` (copies stay put). Looks: natural, rainbow, ghost glow, lidar. |
 | `Vanish (Disintegrate)` | Dissolve direction, particle type (ash / embers / sparks / pixels), wind, turbulence, density, freeze. |
 | `Bullet Time 2.5D` | Automatic apex detection or a fixed time, swing angle, push-in, slow-motion ramp, flash, motion blur. |
-| `Stabilize Video Depth` | Removes frame-to-frame scale flicker from per-frame Depth Anything 3 video depth. |
+| `Video Depth (Depth Anything 3)` | Runs ComfyUI's native Depth Anything 3 over a clip with a progress bar, optionally on every Nth frame, and stabilizes it. Outputs standard `DA3_GEOMETRY` and a depth preview. |
+| `Stabilize Video Depth` | Removes frame-to-frame scale flicker from per-frame Depth Anything 3 video depth (for use after the core `Run Depth Anything 3` node). |
 | `Clean Plate (static camera)` | Recovers the empty background of a tripod shot as a temporal median, with matte-and-refine passes that remove a lingering subject. |
 | `Subject Matte (clean plate)` | Fast subject masks for tripod shots, about 0.1–0.2 s per 720p frame on a CPU. |
 | `Subject Matte (BiRefNet video)` | Masks for any camera, using ComfyUI's BiRefNet: bf16 on AMX CPUs, keyed every Nth frame. |
@@ -155,6 +157,14 @@ On a GPU, the same workflows run in a few seconds.
 |---|---|---|---|
 | Depth Anything 3 Mono-Large (or Small) | video depth, sky mask | Apache-2.0 | [Comfy-Org/Depth-Anything-3](https://huggingface.co/Comfy-Org/Depth-Anything-3) |
 | BiRefNet | subject mattes on moving-camera shots | MIT | [Comfy-Org/BiRefNet](https://huggingface.co/Comfy-Org/BiRefNet) |
+
+## Demo video
+
+The submission video was cut entirely from this repo, using the scripts in `scripts/demo/`:
+- Playwright screen recordings of the app and ComfyUI (`record_app.js`, `record_comfy.js`).
+- Overlay cards (`cards.py`).
+- ElevenLabs voice-over, music and sound effects (`tts.py`, `audio_assets.py`; needs `ELEVENLABS_API_KEY`).
+- An ffmpeg edit with word-timed captions (`make_video.py timeline.json out.mp4`).
 
 ## Credits
 

@@ -1,0 +1,276 @@
+{
+ "root": "/home/user",
+ "narration_dir": "demo/vo",
+ "audio_dir": "demo/audio",
+ "music_gain": 0.35,
+ "segments": [
+  {
+   "narration": "s1_hook",
+   "pieces": [
+    {
+     "src": "spike/out/lidar_4855_cyan.mp4",
+     "in": 1.0,
+     "dur": 2.75,
+     "overlay": "demo/cards/label_lidar.png",
+     "sfx": [
+      [
+       "laser_sweep",
+       0.0
+      ]
+     ]
+    },
+    {
+     "src": "ComfyUI/output/lidarlab/clones_00001_.mp4",
+     "in": 1.2,
+     "dur": 2.7,
+     "overlay": "demo/cards/label_clones.png",
+     "sfx": [
+      [
+       "shutter",
+       0.3
+      ]
+     ]
+    },
+    {
+     "src": "spike/out/vanish_452_ash.mp4",
+     "in": 0.9,
+     "dur": 2.7,
+     "overlay": "demo/cards/label_vanish.png",
+     "sfx": [
+      [
+       "dust",
+       0.15
+      ]
+     ]
+    },
+    {
+     "src": "spike/out/bullet_21756.mp4",
+     "in": 2.05,
+     "dur": 2.75,
+     "overlay": "demo/cards/label_bullet.png",
+     "sfx": [
+      [
+       "freeze",
+       0.45
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "narration": "s2_intro",
+   "pieces": [
+    {
+     "src": "spike/out/lidar_16125_thermal.mp4",
+     "in": 2.2,
+     "dur": 4.0,
+     "blur": true,
+     "overlay": "demo/cards/title.png",
+     "sfx": [
+      [
+       "logo",
+       0.15
+      ]
+     ]
+    },
+    {
+     "src": "demo/rec/app_flow.webm",
+     "in": 1.0,
+     "dur": 3.58,
+     "overlay": "demo/cards/label_app.png",
+     "sfx": [
+      [
+       "whoosh",
+       0.0
+      ]
+     ],
+     "crop": [
+      0,
+      0,
+      1280,
+      720
+     ]
+    },
+    {
+     "src": "spike/out/lidar_4855_rgb.mp4",
+     "in": 2.0,
+     "dur": 4.64,
+     "overlay": "demo/cards/label_rgb.png"
+    },
+    {
+     "src": "spike/out/lidar_16125_thermal.mp4",
+     "in": 2.4,
+     "dur": 4.13,
+     "overlay": "demo/cards/label_thermal.png",
+     "overlay2": "demo/cards/badge_cpu.png"
+    }
+   ]
+  },
+  {
+   "narration": "s3_app",
+   "pieces": [
+    {
+     "src": "demo/rec/app_flow.webm",
+     "in": 9.2,
+     "dur": 4.86,
+     "speed": 2.0,
+     "crop": [
+      0,
+      0,
+      1280,
+      720
+     ]
+    },
+    {
+     "src": "demo/rec/app_flow.webm",
+     "in": 19.0,
+     "dur": 7.92,
+     "speed": 25.9,
+     "overlay": "demo/cards/ff.png",
+     "crop": [
+      0,
+      0,
+      1280,
+      720
+     ]
+    },
+    {
+     "src": "demo/rec/app_flow.webm",
+     "in": 224.0,
+     "dur": 6.12,
+     "crop": [
+      0,
+      0,
+      1280,
+      720
+     ]
+    }
+   ]
+  },
+  {
+   "narration": "s4_graph",
+   "pieces": [
+    {
+     "src": "demo/rec/comfy_tour.webm",
+     "in": 5.6,
+     "dur": 15.0,
+     "speed": 1.07,
+     "overlay": "demo/cards/label_comfy.png",
+     "sfx": [
+      [
+       "whoosh",
+       0.0
+      ]
+     ]
+    },
+    {
+     "src": "spike/out/vanish_452_ash.mp4",
+     "in": 0.5,
+     "dur": 3.0,
+     "overlay": "demo/cards/label_plate.png"
+    },
+    {
+     "src": "spike/out/matte_21756.mp4",
+     "in": 0.4,
+     "dur": 3.1,
+     "fit": true,
+     "overlay": "demo/cards/label_matte.png"
+    },
+    {
+     "src": "demo/rec/comfy_tour.webm",
+     "in": 24.4,
+     "dur": 3.5,
+     "crop": [
+      640,
+      0,
+      1280,
+      720
+     ],
+     "overlay": "demo/cards/label_appmode.png"
+    }
+   ]
+  },
+  {
+   "narration": "s5_why",
+   "pieces": [
+    {
+     "src": "demo/cards/pipeline.png",
+     "dur": 7.66,
+     "sfx": [
+      [
+       "whoosh",
+       0.0
+      ]
+     ]
+    },
+    {
+     "src": "spike/out/lidar_2789_gold.mp4",
+     "in": 2.6,
+     "dur": 3.3,
+     "overlay": "demo/cards/label_gold.png"
+    },
+    {
+     "src": "spike/out/clones_452_trail.mp4",
+     "in": 0.8,
+     "dur": 3.34,
+     "overlay": "demo/cards/label_clones_trail.png"
+    },
+    {
+     "src": "demo/cards/bench.png",
+     "dur": 9.7,
+     "sfx": [
+      [
+       "whoosh",
+       0.0
+      ]
+     ]
+    },
+    {
+     "src": "spike/out/lidar_30403.mp4",
+     "in": 2.2,
+     "dur": 3.45,
+     "overlay": "demo/cards/label_lidar.png"
+    }
+   ]
+  },
+  {
+   "narration": "s6_outro",
+   "extra": 3.5,
+   "pieces": [
+    {
+     "src": "spike/out/lidar_4855_matrix.mp4",
+     "in": 0.6,
+     "dur": 2.4,
+     "overlay": "demo/cards/label_matrix.png",
+     "sfx": [
+      [
+       "laser_sweep",
+       0.0
+      ]
+     ]
+    },
+    {
+     "src": "spike/out/vanish_452_pixels.mp4",
+     "in": 1.0,
+     "dur": 2.2,
+     "overlay": "demo/cards/label_vanish_pixels.png"
+    },
+    {
+     "src": "spike/out/bullet_21756.mp4",
+     "in": 2.6,
+     "dur": 2.0
+    },
+    {
+     "src": "demo/cards/end.png",
+     "dur": 5.88,
+     "sfx": [
+      [
+       "logo",
+       0.2
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

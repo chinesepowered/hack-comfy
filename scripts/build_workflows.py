@@ -46,13 +46,10 @@ def head(g, max_side=1280, duration=8.0):
     return load, comp, scale
 
 
-def depth(g, images, stabilize=True):
+def depth(g, images):
     m = g.add("LoadDA3Model", "Depth Anything 3", model_name=DA3_MODEL, weight_dtype="bf16")
-    d = g.add("DA3Inference", "Video depth", da3_model=[m, 0], image=[images, 0], resolution=504,
-              resize_method="upper_bound_resize", mode="mono")
-    if stabilize:
-        d = g.add("LidarLabStabilizeDepth", "Stabilize depth", da3_geometry=[d, 0], temporal_smoothing=0.6)
-    return d
+    return g.add("LidarLabVideoDepth", "Video depth", da3_model=[m, 0], images=[images, 0], resolution=504,
+                 frame_stride=1, temporal_smoothing=0.6)
 
 
 def tail(g, frames, comp, prefix, audio=True):
