@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LiDAR Lab</title>
+  <meta name="description" content="Open-source Higgsfield-style video effects running on ComfyUI. No GPU required.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23060a12'/><g fill='%234de1ff'><circle cx='8' cy='20' r='1.6'/><circle cx='12' cy='17' r='1.6'/><circle cx='16' cy='14' r='1.6'/><circle cx='20' cy='17' r='1.6'/><circle cx='24' cy='20' r='1.6'/><circle cx='12' cy='23' r='1.2'/><circle cx='20' cy='23' r='1.2'/></g></svg>">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0b1220"/><g fill="#4de1ff"><circle cx="8" cy="20" r="1.6"/><circle cx="12" cy="17" r="1.6"/><circle cx="16" cy="14" r="1.6"/><circle cx="20" cy="17" r="1.6"/><circle cx="24" cy="20" r="1.6"/><circle cx="12" cy="23" r="1.2"/><circle cx="20" cy="23" r="1.2"/></g></svg>
+      <span>LiDAR Lab</span>
+    </a>
+    <nav>
+      <span class="pill" id="engine-pill"><span class="dot"></span>ComfyUI · local</span>
+      <a href="https://github.com/chinesepowered/hack-comfy" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">#OpenSourceHiggsfield</p>
+      <h1>Scan it. Clone it. <span class="grad">Vaporize it.</span></h1>
+      <p class="sub">Higgsfield-style video effects, rebuilt in the open on ComfyUI. Every effect is a node graph you can open and change, and it runs on open-weight models with no GPU required.</p>
+    </section>
+
+    <section class="grid" id="grid" aria-label="Effects"></section>
+
+    <section class="how">
+      <div><b>1</b><span>Pick an effect and drop in a clip (or use a sample).</span></div>
+      <div><b>2</b><span>The app runs the effect's ComfyUI workflow through the Comfy SDK.</span></div>
+      <div><b>3</b><span>Download the video, or grab the exact workflow to remix in ComfyUI.</span></div>
+    </section>
+  </main>
+
+  <footer>
+    Built with ComfyUI, Depth Anything 3 (Apache-2.0) and BiRefNet (MIT). Open weights only, Apache-2.0 code.
+  </footer>
+
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <button class="x" data-close aria-label="Close">✕</button>
+      <div class="sheet-head">
+        <p class="eyebrow" id="sheet-hf"></p>
+        <h2 id="sheet-title"></h2>
+        <p class="muted" id="sheet-tagline"></p>
+      </div>
+
+      <form id="create" autocomplete="off">
+        <div class="step">
+          <h3>Your clip</h3>
+          <label class="drop" id="drop">
+            <input type="file" id="file" accept="video/*" hidden>
+            <span class="drop-icon">⬆</span>
+            <span id="drop-label">Drop a video here or <u>browse</u></span>
+            <span class="muted small" id="best-with"></span>
+          </label>
+          <div class="samples" id="samples"></div>
+          <div class="trim">
+            <label>Start <output id="start-out">0.0s</output><input type="range" id="start" min="0" max="30" step="0.1" value="0"></label>
+            <label>Length <output id="dur-out">5.0s</output><input type="range" id="duration" min="1" max="8" step="0.5" value="5"></label>
+          </div>
+        </div>
+
+        <div class="step">
+          <h3>Style</h3>
+          <div id="options"></div>
+          <label class="toggle" id="anycam-wrap" hidden><input type="checkbox" id="anycam"> Moving camera (uses BiRefNet: slower, works on any shot)</label>
+        </div>
+
+        <button class="go" id="go" type="submit">Generate</button>
+      </form>
+
+      <div class="run" id="run" hidden>
+        <div class="bar"><div class="fill" id="fill"></div></div>
+        <div class="run-meta"><span id="stage">Starting…</span><span class="mono" id="elapsed">0s</span></div>
+        <p class="muted small">Running the workflow on ComfyUI via the Comfy SDK. On a CPU, expect roughly a minute per 5 seconds of video.</p>
+      </div>
+
+      <div class="result" id="result" hidden>
+        <video id="out" controls loop playsinline autoplay muted></video>
+        <div class="actions">
+          <a class="btn primary" id="dl" download>Download video</a>
+          <a class="btn" id="wf" download>Get the ComfyUI workflow</a>
+          <button class="btn" id="again" type="button">Make another</button>
+        </div>
+      </div>
+
+      <p class="error" id="error" hidden></p>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -84,7 +84,8 @@ class CleanPlate(io.ComfyNode):
 
     @classmethod
     def execute(cls, images, max_samples, refine, masks=None) -> io.NodeOutput:
-        plate = M.clean_plate(images[..., :3].float(), max_samples=max_samples, masks=masks, refine=refine)
+        plate = M.clean_plate(images[..., :3].float(), max_samples=max_samples, masks=masks, refine=refine,
+                              progress=_pbar(max(1, refine * min(images.shape[0], max_samples))))
         return io.NodeOutput(plate[None])
 
 

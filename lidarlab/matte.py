@@ -13,7 +13,7 @@ import torch.nn.functional as F
 
 
 def clean_plate(images: torch.Tensor, max_samples: int = 48, masks: torch.Tensor | None = None,
-                refine: int = 1, threshold: float = 0.10) -> torch.Tensor:
+                refine: int = 1, threshold: float = 0.10, progress=None) -> torch.Tensor:
     """Temporal median of (T,H,W,3) frames -> (H,W,3).
 
     Masked pixels are ignored when masks are given. Without masks, `refine`
@@ -25,8 +25,10 @@ def clean_plate(images: torch.Tensor, max_samples: int = 48, masks: torch.Tensor
     stack = images[idx].float()
     if masks is None and refine > 0:
         plate = torch.median(stack, dim=0).values
-        for _ in range(refine):
-            m = difference_matte(stack, plate, threshold=threshold, softness=0.0, grow=6, max_subjects=3)
+        n = stack.shape[0]
+        for r in range(refine):
+            cb = (lambda i, _n, r=r: progress(r * n + i, refine * n)) if progress else None
+            m = difference_matte(stack, plate, threshold=threshold, softness=0.0, grow=6, max_subjects=3, progress=cb)
             plate = clean_plate(stack, max_samples=stack.shape[0], masks=m, refine=0)
         return plate
     if masks is not None:
