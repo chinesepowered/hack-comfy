@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+*.env
+.venv/
+node_modules/
+# local renders / caches (showcase media that ships lives in docs/media)
+out/
+cache/
+*.part
+.DS_Store
