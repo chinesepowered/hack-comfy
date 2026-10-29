@@ -187,7 +187,7 @@ class BiRefNetVideoMatte(io.ComfyNode):
             category=UTIL,
             search_aliases=["birefnet", "remove background video", "video matte", "segment person"],
             description="Runs ComfyUI's BiRefNet background-removal model over a video for moving-camera shots. "
-                        "Uses bf16 on AMX / AVX512-BF16 CPUs (about 3x faster) and can key every Nth frame.",
+                        "Uses bf16 on AMX / AVX512-BF16 CPUs (about 1.5x faster) and can key every Nth frame.",
             inputs=[
                 io.BackgroundRemoval.Input("bg_removal_model", tooltip="From Load Background Removal Model (birefnet.safetensors)."),
                 io.Image.Input("images"),
